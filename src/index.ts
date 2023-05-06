@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import cors from "cors";
 import { db } from "./config/index";
+import buyerRouter from "./routes/buyerRoute";
 
 dotenv.config();
 
@@ -28,6 +29,9 @@ app.use(
     origin: "*",
   })
 );
+
+/** Routes */
+app.use("/users", buyerRouter);
 
 const port = process.env.PORT || 4000;
 

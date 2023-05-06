@@ -9,6 +9,7 @@ const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const cors_1 = __importDefault(require("cors"));
 const index_1 = require("./config/index");
+const buyerRoute_1 = __importDefault(require("./routes/buyerRoute"));
 dotenv_1.default.config();
 /*  ========  SEQUELIZE CONNECTION ========== */
 index_1.db.sync()
@@ -23,6 +24,8 @@ app.use((0, cookie_parser_1.default)());
 app.use((0, cors_1.default)({
     origin: "*",
 }));
+/** Routes */
+app.use("/users", buyerRoute_1.default);
 const port = process.env.PORT || 4000;
 app.listen(port, () => {
     console.log(`Server is running on port http://localhost:${port}`);
