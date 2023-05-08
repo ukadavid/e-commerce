@@ -1,14 +1,14 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.db = void 0;
-const sequelize_1 = require("sequelize");
-const db_port = Number(process.env.DB_PORT);
-const db_password = String(process.env.DB_PASSWORD);
-exports.db = new sequelize_1.Sequelize({
-    dialect: "postgres",
-    host: process.env.DB_HOST,
-    port: db_port,
-    database: process.env.DB_NAME,
-    username: process.env.DB_USERNAME,
-    password: db_password,
-});
+exports.USER_SUBJECT = exports.FROM_ADMIN_MAIL = exports.SENDINBLUE_PORT = exports.SENDINBLUE_HOST = exports.SENDINBLUE_PASSWORD = exports.SENDINBLUE_USER = void 0;
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
+exports.SENDINBLUE_USER = process.env.SENDINBLUE_USER;
+exports.SENDINBLUE_PASSWORD = process.env.SENDINBLUE_PASSWORD;
+exports.SENDINBLUE_HOST = process.env.SENDINBLUE_HOST;
+exports.SENDINBLUE_PORT = Number(process.env.SENDINBLUE_PORT);
+exports.FROM_ADMIN_MAIL = process.env.FROM_ADMIN_MAIL;
+exports.USER_SUBJECT = process.env.USER_SUBJECT;

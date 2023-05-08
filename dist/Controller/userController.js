@@ -8,12 +8,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Register = void 0;
 const uuid_1 = require("uuid");
 const utility_1 = require("../utils/utility");
 const notification_1 = require("../utils/notification");
-const userModel_1 = require("../Model/userModel");
+const config_1 = require("../config");
+const userModel_1 = __importDefault(require("../Model/userModel"));
 /**============= Register ================*/
 const Register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -31,10 +35,10 @@ const Register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         //Generate OTP
         const { otp, expiry } = yield (0, notification_1.GenerateOtp)();
         // Check if user exist
-        const user = yield userModel_1.UserInstance.findOne({ where: { email } });
+        const user = yield userModel_1.default.findOne({ where: { email } });
         // Create User
         if (!user) {
-            const user = yield userModel_1.UserInstance.create({
+            const user = yield userModel_1.default.create({
                 id,
                 email,
                 password: userPassword,
@@ -50,11 +54,17 @@ const Register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 verified: false,
                 role: "buyer",
             });
-            res.status(201).json({
+            // Send Email
+            const html = (0, notification_1.emailHtml)(otp);
+            yield (0, notification_1.SendMail)(email, config_1.FROM_ADMIN_MAIL, html, config_1.USER_SUBJECT);
+            return res.status(201).json({
                 message: "User Created Successfully",
                 user,
             });
         }
+        return res.status(400).json({
+            Error: "User already exist",
+        });
     }
     catch (error) {
         return res.status(500).json({

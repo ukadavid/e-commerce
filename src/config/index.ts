@@ -1,13 +1,9 @@
-import { Sequelize } from "sequelize";
+import dotenv from "dotenv";
+dotenv.config();
 
-const db_port = Number(process.env.DB_PORT);
-const db_password = String(process.env.DB_PASSWORD);
-
-export const db = new Sequelize({
-  dialect: "postgres",
-  host: process.env.DB_HOST,
-  port: db_port,
-  database: process.env.DB_NAME,
-  username: process.env.DB_USERNAME,
-  password: db_password,
-});
+export const SENDINBLUE_USER = process.env.SENDINBLUE_USER as string;
+export const SENDINBLUE_PASSWORD = process.env.SENDINBLUE_PASSWORD as string;
+export const SENDINBLUE_HOST = process.env.SENDINBLUE_HOST as string;
+export const SENDINBLUE_PORT = Number(process.env.SENDINBLUE_PORT);
+export const FROM_ADMIN_MAIL = process.env.FROM_ADMIN_MAIL as string;
+export const USER_SUBJECT = process.env.USER_SUBJECT as string;

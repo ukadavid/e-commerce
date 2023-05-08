@@ -6,8 +6,9 @@ import {
   options,
   registerSchema,
 } from "../utils/utility";
-import { GenerateOtp } from "../utils/notification";
-import { UserInstance } from "../Model/userModel";
+import { GenerateOtp, emailHtml, SendMail } from "../utils/notification";
+import { FROM_ADMIN_MAIL, USER_SUBJECT } from "../config";
+import UserModel from "../Model/userModel";
 
 /**============= Register ================*/
 export const Register = async (req: Request, res: Response) => {
@@ -30,11 +31,11 @@ export const Register = async (req: Request, res: Response) => {
     const { otp, expiry } = await GenerateOtp();
 
     // Check if user exist
-    const user = await UserInstance.findOne({ where: { email } });
+    const user = await UserModel.findOne({ where: { email } });
 
     // Create User
     if (!user) {
-      const user = await UserInstance.create({
+      const user = await UserModel.create({
         id,
         email,
         password: userPassword,
@@ -50,11 +51,20 @@ export const Register = async (req: Request, res: Response) => {
         verified: false,
         role: "buyer",
       });
-      res.status(201).json({
+
+      // Send Email
+      const html = emailHtml(otp);
+      await SendMail(email, FROM_ADMIN_MAIL, html, USER_SUBJECT);
+
+
+      return res.status(201).json({
         message: "User Created Successfully",
         user,
       });
     }
+    return res.status(400).json({
+      Error: "User already exist",
+    });
   } catch (error) {
     return res.status(500).json({
       Error: "Internal Server Error",

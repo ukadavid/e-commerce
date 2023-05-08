@@ -1,24 +1,37 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserInstance = void 0;
-const sequelize_1 = require("sequelize");
-const index_1 = require("../config/index");
-class UserInstance extends sequelize_1.Model {
-}
-exports.UserInstance = UserInstance;
-UserInstance.init({
+exports.UserModel = void 0;
+const db_1 = require("../db/db");
+// export interface UserAttributes {
+//   id: string;
+//   email: string;
+//   password: string;
+//   firstname: string;
+//   lastname: string;
+//   address: string;
+//   phone: string;
+//   otp: number;
+//   otp_expiry: Date;
+//   lng: number;
+//   lat: number;
+//   verified: boolean;
+//   salt: string;
+//   role: string;
+// }
+exports.UserModel = db_1.sequelize.define("user", {
     id: {
-        type: sequelize_1.DataTypes.UUIDV4,
+        type: db_1.DataTypes.UUID,
+        defaultValue: db_1.DataTypes.UUIDV4,
         primaryKey: true,
         allowNull: false,
     },
     email: {
-        type: sequelize_1.DataTypes.STRING,
+        type: db_1.DataTypes.STRING,
         allowNull: false,
         unique: true,
     },
     password: {
-        type: sequelize_1.DataTypes.STRING,
+        type: db_1.DataTypes.STRING,
         allowNull: false,
         validate: {
             notNull: {
@@ -27,51 +40,49 @@ UserInstance.init({
         },
     },
     firstname: {
-        type: sequelize_1.DataTypes.STRING,
+        type: db_1.DataTypes.STRING,
         allowNull: true,
     },
     lastname: {
-        type: sequelize_1.DataTypes.STRING,
+        type: db_1.DataTypes.STRING,
         allowNull: true,
     },
     address: {
-        type: sequelize_1.DataTypes.STRING,
+        type: db_1.DataTypes.STRING,
         allowNull: true,
     },
     phone: {
-        type: sequelize_1.DataTypes.STRING,
+        type: db_1.DataTypes.STRING,
         allowNull: true,
         unique: true,
     },
     otp: {
-        type: sequelize_1.DataTypes.INTEGER,
+        type: db_1.DataTypes.INTEGER,
         allowNull: true,
     },
     otp_expiry: {
-        type: sequelize_1.DataTypes.DATE,
+        type: db_1.DataTypes.DATE,
         allowNull: true,
     },
     lng: {
-        type: sequelize_1.DataTypes.FLOAT,
+        type: db_1.DataTypes.FLOAT,
         allowNull: true,
     },
     lat: {
-        type: sequelize_1.DataTypes.FLOAT,
+        type: db_1.DataTypes.FLOAT,
         allowNull: true,
     },
     verified: {
-        type: sequelize_1.DataTypes.BOOLEAN,
+        type: db_1.DataTypes.BOOLEAN,
         allowNull: true,
     },
     role: {
-        type: sequelize_1.DataTypes.STRING,
+        type: db_1.DataTypes.STRING,
         allowNull: true,
     },
     salt: {
-        type: sequelize_1.DataTypes.STRING,
+        type: db_1.DataTypes.STRING,
         allowNull: true,
     },
-}, {
-    sequelize: index_1.db,
-    tableName: "user",
 });
+exports.default = exports.UserModel;

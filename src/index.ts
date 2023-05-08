@@ -3,18 +3,11 @@ import logger from "morgan";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import cors from "cors";
-import { db } from "./config/index";
+import { connectDB, sequelize, Sequelize } from "./db/db";
 import buyerRouter from "./routes/buyerRoute";
-
 dotenv.config();
 
 /*  ========  SEQUELIZE CONNECTION ========== */
-
-db.sync()
-  .then(() => {
-    console.log(`DB Connected Successfully`);
-  })
-  .catch((err) => console.log(err));
 
 const app = express();
 
@@ -35,6 +28,10 @@ app.use("/users", buyerRouter);
 
 const port = process.env.PORT || 4000;
 
-app.listen(port, () => {
+app.listen(port, async () => {
   console.log(`Server is running on port http://localhost:${port}`);
+  await connectDB();
+  sequelize.sync({ force: false }).then(() => {
+    console.log("Database Synced created!");
+  });
 });
